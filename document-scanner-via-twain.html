@@ -7,9 +7,26 @@
 </head>
 <body>
     <input type="button" value="Scan" onclick="AcquireImage();" />
+    <label>
+      Scanner:
+      <select id="scannerSelect"></select>
+    </label>
+    <label>
+      Use the scanner's configuration UI:
+      <input type="checkbox" id="showUI"/>
+    </label>
+    <label>
+      Auto Document Feeder:
+      <input type="checkbox" id="ADF"/>
+    </label>
+    <label>
+      Duplex:
+      <input type="checkbox" id="duplex"/>
+    </label>
     <div id="dwtcontrolContainer"></div>
     <script type="text/javascript">
         let DWObject;
+        let scanners;
         initDWT();
 
         function initDWT(){
@@ -29,22 +46,38 @@
               DWObject.Viewer.width = "360px";
               DWObject.Viewer.show();
               DWObject.Viewer.setViewMode(2,2);
+              loadScanners();
             },
             function(err) {
               console.log(err);
             }
           );
         }
-        function AcquireImage() {
-            if (DWObject) {
-                DWObject.SelectSourceAsync().then(function () {
-                    return DWObject.AcquireImageAsync({ 
-                        IfCloseSourceAfterAcquire: true 
-                    });
-                }).catch(function (exp) {
-                    alert(exp.message);
-                });
-            }
+
+        async function loadScanners(){
+          scanners = await DWObject.GetDevicesAsync();
+          let selScanners = document.getElementById("scannerSelect");
+          selScanners.innerHTML = "";
+          for (let index = 0; index < scanners.length; index++) {
+            const scanner = scanners[index];
+            let option = new Option(scanner.displayName,index);
+            selScanners.appendChild(option);
+          }
+        }
+
+        async function AcquireImage() {
+          if (DWObject) {
+            const selectedIndex = document.getElementById("scannerSelect").selectedIndex;
+            const options = {
+              IfShowUI:document.getElementById("showUI").checked,
+              IfFeederEnabled:document.getElementById("ADF").checked,
+              IfDuplexEnabled:document.getElementById("duplex").checked
+            };
+            await DWObject.SelectDeviceAsync(scanners[selectedIndex]);
+            await DWObject.OpenSourceAsync();
+            await DWObject.AcquireImageAsync(options);
+            await DWObject.CloseSourceAsync();
+          }
         }
 
     </script>
