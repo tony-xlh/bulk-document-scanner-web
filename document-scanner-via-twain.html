@@ -1,86 +1,87 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Hello World</title>
+    <title>Document Scanning via TWAIN</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
     <script src="https://unpkg.com/dwt@18.5.0/dist/dynamsoft.webtwain.min.js"></script>
 </head>
 <body>
-    <input type="button" value="Scan" onclick="AcquireImage();" />
-    <label>
-      Scanner:
-      <select id="scannerSelect"></select>
-    </label>
-    <label>
-      Use the scanner's configuration UI:
-      <input type="checkbox" id="showUI"/>
-    </label>
-    <label>
-      Auto Document Feeder:
-      <input type="checkbox" id="ADF"/>
-    </label>
-    <label>
-      Duplex:
-      <input type="checkbox" id="duplex"/>
-    </label>
-    <div id="dwtcontrolContainer"></div>
-    <script type="text/javascript">
-        let DWObject;
-        let scanners;
-        initDWT();
+  <h2>Document Scanning via TWAIN</h2>
+  <input type="button" value="Scan" onclick="AcquireImage();" />
+  <label>
+    Scanner:
+    <select id="scannerSelect"></select>
+  </label>
+  <label>
+    Use the scanner's configuration UI:
+    <input type="checkbox" id="showUI"/>
+  </label>
+  <label>
+    Auto Document Feeder:
+    <input type="checkbox" id="ADF"/>
+  </label>
+  <label>
+    Duplex:
+    <input type="checkbox" id="duplex"/>
+  </label>
+  <div id="dwtcontrolContainer"></div>
+  <script type="text/javascript">
+    let DWObject;
+    let scanners;
+    initDWT();
 
-        function initDWT(){
-          Dynamsoft.DWT.AutoLoad = false;
-          Dynamsoft.DWT.Containers = [];
-          Dynamsoft.DWT.ResourcesPath = "https://unpkg.com/dwt@18.5.0/dist";
-          let oneDayTrialLicense = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==";
-          Dynamsoft.DWT.ProductKey = oneDayTrialLicense;  
-          Dynamsoft.DWT.CreateDWTObjectEx(
-            {
-              WebTwainId: 'dwtcontrol'
-            },
-            function(obj) {
-              DWObject = obj;
-              DWObject.Viewer.bind(document.getElementById('dwtcontrolContainer'));
-              DWObject.Viewer.height = "480px";
-              DWObject.Viewer.width = "360px";
-              DWObject.Viewer.show();
-              DWObject.Viewer.setViewMode(2,2);
-              loadScanners();
-            },
-            function(err) {
-              console.log(err);
-            }
-          );
+    function initDWT(){
+      Dynamsoft.DWT.AutoLoad = false;
+      Dynamsoft.DWT.Containers = [];
+      Dynamsoft.DWT.ResourcesPath = "https://unpkg.com/dwt@18.5.0/dist";
+      let oneDayTrialLicense = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==";
+      Dynamsoft.DWT.ProductKey = oneDayTrialLicense;  
+      Dynamsoft.DWT.CreateDWTObjectEx(
+        {
+          WebTwainId: 'dwtcontrol'
+        },
+        function(obj) {
+          DWObject = obj;
+          DWObject.Viewer.bind(document.getElementById('dwtcontrolContainer'));
+          DWObject.Viewer.height = "480px";
+          DWObject.Viewer.width = "360px";
+          DWObject.Viewer.show();
+          DWObject.Viewer.setViewMode(2,2);
+          loadScanners();
+        },
+        function(err) {
+          console.log(err);
         }
+      );
+    }
 
-        async function loadScanners(){
-          scanners = await DWObject.GetDevicesAsync();
-          let selScanners = document.getElementById("scannerSelect");
-          selScanners.innerHTML = "";
-          for (let index = 0; index < scanners.length; index++) {
-            const scanner = scanners[index];
-            let option = new Option(scanner.displayName,index);
-            selScanners.appendChild(option);
-          }
-        }
+    async function loadScanners(){
+      scanners = await DWObject.GetDevicesAsync();
+      let selScanners = document.getElementById("scannerSelect");
+      selScanners.innerHTML = "";
+      for (let index = 0; index < scanners.length; index++) {
+        const scanner = scanners[index];
+        let option = new Option(scanner.displayName,index);
+        selScanners.appendChild(option);
+      }
+    }
 
-        async function AcquireImage() {
-          if (DWObject) {
-            const selectedIndex = document.getElementById("scannerSelect").selectedIndex;
-            const options = {
-              IfShowUI:document.getElementById("showUI").checked,
-              IfFeederEnabled:document.getElementById("ADF").checked,
-              IfDuplexEnabled:document.getElementById("duplex").checked
-            };
-            await DWObject.SelectDeviceAsync(scanners[selectedIndex]);
-            await DWObject.OpenSourceAsync();
-            await DWObject.AcquireImageAsync(options);
-            await DWObject.CloseSourceAsync();
-          }
-        }
+    async function AcquireImage() {
+      if (DWObject) {
+        const selectedIndex = document.getElementById("scannerSelect").selectedIndex;
+        const options = {
+          IfShowUI:document.getElementById("showUI").checked,
+          IfFeederEnabled:document.getElementById("ADF").checked,
+          IfDuplexEnabled:document.getElementById("duplex").checked
+        };
+        await DWObject.SelectDeviceAsync(scanners[selectedIndex]);
+        await DWObject.OpenSourceAsync();
+        await DWObject.AcquireImageAsync(options);
+        await DWObject.CloseSourceAsync();
+      }
+    }
 
-    </script>
+  </script>
 </body>
 
 </html>
