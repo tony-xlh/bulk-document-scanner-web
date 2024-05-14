@@ -10,7 +10,7 @@
   <input type="button" value="Scan" onclick="AcquireImage();" />
   <label>
     Scanner:
-    <select id="scannerSelect"></select>
+    <select id="select-scanner"></select>
   </label>
   <label>
     Use the scanner's configuration UI:
@@ -57,7 +57,7 @@
 
     async function loadScanners(){
       scanners = await DWObject.GetDevicesAsync();
-      let selScanners = document.getElementById("scannerSelect");
+      let selScanners = document.getElementById("select-scanner");
       selScanners.innerHTML = "";
       for (let index = 0; index < scanners.length; index++) {
         const scanner = scanners[index];
@@ -68,7 +68,7 @@
 
     async function AcquireImage() {
       if (DWObject) {
-        const selectedIndex = document.getElementById("scannerSelect").selectedIndex;
+        const selectedIndex = document.getElementById("select-scanner").selectedIndex;
         const options = {
           IfShowUI:document.getElementById("showUI").checked,
           IfFeederEnabled:document.getElementById("ADF").checked,
