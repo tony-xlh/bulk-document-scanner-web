@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hello World</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+    <script src="https://unpkg.com/dwt@18.5.0/dist/dynamsoft.webtwain.min.js"></script>
+</head>
+<body>
+    <input type="button" value="Scan" onclick="AcquireImage();" />
+    <div id="dwtcontrolContainer"></div>
+    <script type="text/javascript">
+        let DWObject;
+        initDWT();
+
+        function initDWT(){
+          Dynamsoft.DWT.AutoLoad = false;
+          Dynamsoft.DWT.Containers = [];
+          Dynamsoft.DWT.ResourcesPath = "https://unpkg.com/dwt@18.5.0/dist";
+          let oneDayTrialLicense = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==";
+          Dynamsoft.DWT.ProductKey = oneDayTrialLicense;  
+          Dynamsoft.DWT.CreateDWTObjectEx(
+            {
+              WebTwainId: 'dwtcontrol'
+            },
+            function(obj) {
+              DWObject = obj;
+              DWObject.Viewer.bind(document.getElementById('dwtcontrolContainer'));
+              DWObject.Viewer.height = "480px";
+              DWObject.Viewer.width = "360px";
+              DWObject.Viewer.show();
+              DWObject.Viewer.setViewMode(2,2);
+            },
+            function(err) {
+              console.log(err);
+            }
+          );
+        }
+        function AcquireImage() {
+            if (DWObject) {
+                DWObject.SelectSourceAsync().then(function () {
+                    return DWObject.AcquireImageAsync({ 
+                        IfCloseSourceAfterAcquire: true 
+                    });
+                }).catch(function (exp) {
+                    alert(exp.message);
+                });
+            }
+        }
+
+    </script>
+</body>
+
+</html>
