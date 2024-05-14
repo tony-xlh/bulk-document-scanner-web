@@ -12,17 +12,38 @@
     Scanner:
     <select id="select-scanner"></select>
   </label>
+  <br/>
   <label>
     Use the scanner's configuration UI:
     <input type="checkbox" id="showUI"/>
   </label>
+  <br/>
   <label>
     Auto Document Feeder:
     <input type="checkbox" id="ADF"/>
   </label>
+  <br/>
   <label>
     Duplex:
     <input type="checkbox" id="duplex"/>
+  </label>
+  <br/>
+  <label>
+    Resolution:
+    <select id="select-resolution">
+      <option value="100">100</option>
+      <option value="200">200</option>
+      <option value="300" selected>300</option>
+    </select>
+  </label>
+  <br/>
+  <label>
+    Pixel Type:
+    <select id="select-pixeltype">
+      <option>Black & White</option>
+      <option>Gray</option>
+      <option selected>Color</option>
+    </select>
   </label>
   <div id="dwtcontrolContainer"></div>
   <script type="text/javascript">
@@ -71,6 +92,8 @@
         const selectedIndex = document.getElementById("select-scanner").selectedIndex;
         const options = {
           IfShowUI:document.getElementById("showUI").checked,
+          PixelType:document.getElementById("select-pixeltype").selectedIndex,
+          Resolution:document.getElementById("select-resolution").selectedOptions[0].value,
           IfFeederEnabled:document.getElementById("ADF").checked,
           IfDuplexEnabled:document.getElementById("duplex").checked
         };
