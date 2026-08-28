@@ -3,7 +3,7 @@
 <head>
     <title>Document Scanning via TWAIN</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
-    <script src="https://unpkg.com/dwt@18.5.0/dist/dynamsoft.webtwain.min.js"></script>
+    <script src="https://unpkg.com/dwt@19.4.3/dist/dynamsoft.webtwain.min.js"></script>
 </head>
 <body>
   <h2>Document Scanning via TWAIN</h2>
@@ -54,7 +54,7 @@
     function initDWT(){
       Dynamsoft.DWT.AutoLoad = false;
       Dynamsoft.DWT.Containers = [];
-      Dynamsoft.DWT.ResourcesPath = "https://unpkg.com/dwt@18.5.0/dist";
+      Dynamsoft.DWT.ResourcesPath = "https://unpkg.com/dwt@19.4.3/dist";
       let oneDayTrialLicense = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==";
       Dynamsoft.DWT.ProductKey = oneDayTrialLicense;  
       Dynamsoft.DWT.CreateDWTObjectEx(
@@ -108,3 +108,4 @@
 </body>
 
 </html>
+

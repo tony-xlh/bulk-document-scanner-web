@@ -3,9 +3,11 @@
 <head>
   <title>Document Scanning via Camera</title>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
-  <script src="https://cdn.jsdelivr.net/npm/dynamsoft-capture-vision-bundle@2.6.1000/dist/dcv.bundle.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/dynamsoft-document-viewer@latest/dist/ddv.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dynamsoft-document-viewer@latest/dist/ddv.css">
+  <script src="https://cdn.jsdelivr.net/npm/dynamsoft-capture-vision-bundle@3.6.3000/dist/dcv.bundle.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dynamsoft-document-viewer@5.0.0/dist/ddv.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dynamsoft-document-viewer@5.0.0/dist/plugins/ddv-plugin-camera.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dynamsoft-document-viewer@5.0.0/dist/plugins/ddv-plugin-image-pdf.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dynamsoft-document-viewer@5.0.0/dist/ddv.css">
   <style>
     #container {
       max-width: 100%;
@@ -39,10 +41,13 @@
     }
 
     async function initMobileWebCapture(){
+      // DDV 5 ships as a core + optional plugins; register the camera and
+      // image/PDF parsers before initializing the core.
+      Dynamsoft.DDV.use(Dynamsoft.DDV.CameraPlugin);
+      Dynamsoft.DDV.use(Dynamsoft.DDV.ImagePdfParserPlugin);
       Dynamsoft.Core.CoreModule.loadWasm(["DDN"]);
-      Dynamsoft.DDV.Core.loadWasm();
 
-      // Initialize DDN
+      // Initialize the capture vision engine (Document Normalizer is included)
       await Dynamsoft.License.LicenseManager.initLicense(
         "DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==",
         true
